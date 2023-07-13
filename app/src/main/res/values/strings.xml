@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Wk8 Songs</string>
+
+    <string name="title_activity_main">Insert Song</string>
+    <string name="title_activity_answer">Show Song</string>
+    <string name="title_Edit_Song">Modify Song</string>
+
+
 </resources>

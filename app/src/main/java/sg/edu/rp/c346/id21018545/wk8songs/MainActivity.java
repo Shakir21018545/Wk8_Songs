@@ -1,86 +1,105 @@
 package sg.edu.rp.c346.id21018545.wk8songs;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnInsert, btnGetTasks;
-    ListView lv;
-    ArrayAdapter<String> aaTodo;
-    ArrayList<Song> alTodo;
-    EditText editTextTitle, editTextSinger,editTextYear;
-    RadioGroup radioGroup;
-    boolean asc = true;
-
+    EditText etTitle, etSingers, etYear;
+    Button btnInsert, btnShowList;
+    RadioGroup rg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle(getTitle().toString() + " ~ " + getResources().getText(R.string.title_activity_main));
+
+        etTitle = findViewById(R.id.editTextTitle);
+        etSingers = findViewById(R.id.editTextSinger);
+        etYear = findViewById(R.id.editTextYear);
         btnInsert = findViewById(R.id.btnInsert);
-        btnGetTasks = findViewById(R.id.btnGetTasks);
-        radioGroup = findViewById(R.id.RadioGroupStars);
-        lv = findViewById(R.id.lv);
-        editTextTitle = findViewById(R.id.editTextTitle);
-        editTextSinger = findViewById(R.id.editTextSinger);
-        editTextYear = findViewById(R.id.editTextYear);
+        btnShowList = findViewById(R.id.btnGetTasks);
+        rg = findViewById(R.id.RadioGroupStars);
 
-        btnInsert.setOnClickListener(new View.OnClickListener(){
+        btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // Create the DBHelper object, passing in the
-                // activity's Context
-                DBHelper db = new DBHelper(MainActivity.this);
-                int rbid = radioGroup.getCheckedRadioButtonId();
-                RadioButton rb = findViewById(rbid);
-                String text = rb.getText().toString();
-                db.insertTask(editTextTitle.getText().toString(),
-                        editTextSinger.getText().toString(),
-                        editTextYear.getText().toString(),
-                        text);
+            public void onClick(View view) {
 
-                db.close();
+                String title = etTitle.getText().toString().trim();
+                String singers = etSingers.getText().toString().trim();
+                if (title.length() == 0 || singers.length() == 0) {
+                    Toast.makeText(MainActivity.this, "Incomplete data", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-            }
-        });
-        btnGetTasks.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                // Create the DBHelper object, passing in the
-                // activity's Context
-                DBHelper db = new DBHelper(MainActivity.this);
 
-                // Insert a task
-                ArrayList<String> data = db.getTaskContent();
-                db.close();
+                String year_str = etYear.getText().toString().trim();
+                int year = 0;
+                try {
+                    year = Integer.valueOf(year_str);
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Invalid year", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                //LIST VIEW
-                DBHelper db2 = new DBHelper(MainActivity.this);
-                alTodo = db2.getTasks(asc);
-                db2.close();
-                asc = !asc;
-                aaTodo = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1, alTodo);
-                lv.setAdapter(aaTodo);
+                DBHelper dbh = new DBHelper(MainActivity.this);
 
+                int stars = getStars();
+                dbh.insertSong(title, singers, year, stars);
+                dbh.close();
+                Toast.makeText(MainActivity.this, "Inserted", Toast.LENGTH_LONG).show();
+
+                etTitle.setText("");
+                etSingers.setText("");
+                etYear.setText("");
 
             }
         });
 
-
+        btnShowList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                Intent i = new Intent(MainActivity.this, AnswerActivity.class);
+                startActivity(i);
+            }
+        });
 
     }
+
+
+    private int getStars() {
+        int stars = 1;
+        if(rg.getCheckedRadioButtonId()==R.id.radioButton1) {
+            stars = 1;
+
+        }
+        if(rg.getCheckedRadioButtonId()==R.id.radioButton2) {
+            stars = 2;
+
+        }
+        if(rg.getCheckedRadioButtonId()==R.id.radioButton3) {
+            stars = 3;
+
+        }
+        if(rg.getCheckedRadioButtonId()==R.id.radioButton4) {
+            stars = 4;
+
+        }
+        if(rg.getCheckedRadioButtonId()==R.id.radioButton5) {
+            stars = 5;
+
+        }
+
+        return stars;
+    }
+
 }
