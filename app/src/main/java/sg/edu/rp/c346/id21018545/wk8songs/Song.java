@@ -1,6 +1,8 @@
 package sg.edu.rp.c346.id21018545.wk8songs;
 
 
+import android.graphics.Color;
+
 import java.io.Serializable;
 
 import androidx.annotation.NonNull;
@@ -31,6 +33,7 @@ public class Song implements Serializable {
     }
 
     public String getTitle() {
+
         return title;
     }
 
@@ -70,10 +73,13 @@ public class Song implements Serializable {
     @Override
     public String toString() {
         String starsString = "";
-        for(int i = 0; i < stars; i++){
+        for (int i = 0; i < stars; i++) {
             starsString += "*";
         }
-        return title + "\n" + singers + " - " + yearReleased + "\n" + starsString;
+
+
+        return title + "\n" + yearReleased + " " + starsString + "\n" + singers;
 
     }
+
 }

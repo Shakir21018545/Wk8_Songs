@@ -2,11 +2,13 @@ package sg.edu.rp.c346.id21018545.wk8songs;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,10 +18,11 @@ public class AnswerActivity extends AppCompatActivity {
 
     ListView lv;
     ArrayList<Song> songList;
-    ArrayAdapter<Song> adapter;
+    //ArrayAdapter<Song> adapter;
     Button btn5Stars;
-
     ArrayList<String> years;
+    CustomAdapter adapter;
+
 
 
     @Override
@@ -42,16 +45,19 @@ public class AnswerActivity extends AppCompatActivity {
 
         setTitle(getTitle().toString() + " ~ " + getResources().getText(R.string.title_activity_answer));
 
-        lv = (ListView) this.findViewById(R.id.lv);
-        btn5Stars = (Button) this.findViewById(R.id.btn5Stars);
+        lv = this.findViewById(R.id.lv);
+        btn5Stars = this.findViewById(R.id.btn5Stars);
 
         DBHelper dbh = new DBHelper(this);
         songList = dbh.getAllSongs();
         years = dbh.getYears();
         dbh.close();
 
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, songList);
+        //adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, songList);
+        //lv.setAdapter(adapter);
+        adapter = new CustomAdapter(this, R.layout.row,songList);
         lv.setAdapter(adapter);
+
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

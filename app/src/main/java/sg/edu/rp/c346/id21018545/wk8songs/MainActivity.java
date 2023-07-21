@@ -3,9 +3,11 @@ package sg.edu.rp.c346.id21018545.wk8songs;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         btnInsert = findViewById(R.id.btnInsert);
         btnShowList = findViewById(R.id.btnGetTasks);
         rg = findViewById(R.id.RadioGroupStars);
+
+
 
         btnInsert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
     }
 
 
@@ -101,5 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
         return stars;
     }
+
+
 
 }
